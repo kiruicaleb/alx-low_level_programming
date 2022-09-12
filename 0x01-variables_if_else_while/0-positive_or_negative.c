@@ -24,7 +24,7 @@ else if (n == 0)
 {
 	ptintf("%i is zero\n", n);
 }
-else if (n < 0)
+else
 {
 	printf("%i is negative\n", n);
 }
