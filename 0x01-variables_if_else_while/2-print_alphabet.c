@@ -13,6 +13,6 @@ for (ch = 'a' ; ch <= '2' ; ch++)
 {
 	putchar(ch);
 }
-putchar("\n");
+putchar('\n');
 return (0);
 }
