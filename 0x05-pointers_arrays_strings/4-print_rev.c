@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <string.>
-#include "msin.h"
+#include <string.h>
+#include "main.h"
 
 /**
  * print_rev - prints string in reverse
