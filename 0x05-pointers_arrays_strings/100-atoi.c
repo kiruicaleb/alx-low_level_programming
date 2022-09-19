@@ -3,7 +3,7 @@
 /**
  * _atoi - Program to convert string to integer
  * @s: Pointer to the string
- * Return: integer value of the string
+ * Return: The integer value of the string
  */
 
 int _atoi(char *s)
@@ -12,7 +12,7 @@ int _atoi(char *s)
 
 	while (s[idx])
 	{
-		if (size >= 0 && (s[idx] < '0' || s[idx] > '9'))
+		if (size > 0 && (s[idx] < '0' || s[idx] > '9'))
 		{
 			break;
 		}
