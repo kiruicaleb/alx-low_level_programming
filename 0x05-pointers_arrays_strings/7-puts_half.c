@@ -26,8 +26,11 @@ void puts_half(char *str)
 		idx = mid + 1;
 	}
 
-	for (idx < count; idx++)
+	for (; idx < count; idx++)
 		_putchar(str[idx]);
 
 	_putchar('\n');
+
+	return (0);
 }
+
