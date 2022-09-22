@@ -2,20 +2,20 @@
 
 /**
  * string_touper - Function to convert lowercase characters to uppercase
- * @s: Pointer to a string
- * Return: Pointer to uppercae string
+ * @s: String to be changed
+ *
+ * Return: Address to the string
  */
 
 char *string_touper(char *s)
 {
-	int idx;
+	int i = 0;
 
-	for (idx = 0; s[idx]; idx++)
+	while (s[i] != '\0')
 	{
-		if (s[idx] >= 'a' && s[idx] <= 'z'')
-		{
+		if (s[i] >= 'a' && s[i] <= 'z'')
 			s[idx] -= 32;
-		}      
-       	} 
+		i++;
+	}
 	return (s);
 }
