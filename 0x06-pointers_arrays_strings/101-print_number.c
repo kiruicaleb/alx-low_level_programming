@@ -1,9 +1,9 @@
 #include "main.h"
 
 /**
- * print_number - Function that prints  an integer
- * @n: Integerto be printed
- * Return: Void
+ *print_number - Function that prints an integer
+ *@n: Integer number to be printed
+ *Return: Void
  */
 
 void print_number(int n)
