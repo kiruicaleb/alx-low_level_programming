@@ -30,7 +30,5 @@ void puts_half(char *str)
 		_putchar(str[idx]);
 
 	_putchar('\n');
-
-	return (0);
 }
 
