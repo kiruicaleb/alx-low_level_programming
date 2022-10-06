@@ -3,7 +3,6 @@
 
 /**
  * _calloc - Function that allocates memory for array using malloc
- *
  * @nmemb: Int for number of elements in the array
  * @size: Int for size of each element in array
  * Return: Pointer value to the allocated memory
