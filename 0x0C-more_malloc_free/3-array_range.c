@@ -2,9 +2,9 @@
 #include <stdlib.h>
 
 /**
-  * array_range - Function thta creates an array of integers
+  * array_range - Function that creates an array of integers
   *
-  * @min: Int of minimum value 
+  * @min: Int of minimum value
   * @max: Int of maximum value
   * * Return: Pointer value to new array
   */
