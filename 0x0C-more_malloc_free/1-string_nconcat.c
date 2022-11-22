@@ -1,40 +1,57 @@
 #include "main.h"
-#include <stdlib.h>
 
-/**
- * string_nconcat - Function to concatenate two strings
- *
- * @s1: Pointer to location of string one
- * @s2: Pointer to location location of string two
- * @n: Int for memory size to be allocated
- * Return: Number of bytes of s2 to be concatenated, otherwise NULL
- */
+	/**
+	 * _strlen - find length of a string
+	 * @s: string
+	 * Return: int
+	 */
 
-char *string_nconcat(char *s1, char *s2, unsigned int n)
-{
-	unsigned int idx = 0, idx2, size;
-	char *str_copy;
+	unsigned int _strlen(char *s)
+	{
+	unsigned int size = 0;
+
+	for (; s[size] != '\0'; size++)
+	;
+
+	return (size);
+	}
+
+	/**
+	 * string_nconcat - concatenates two strings
+	 * @s1: string 1
+	 * @s2: string 2
+	 * @n: first bytes of s2 to be used
+	 * Return: pointer or NULL
+	 */
+
+	char *string_nconcat(char *s1, char *s2, unsigned int n)
+	{
+	unsigned int i, j;
+	char *m;
 
 	if (s1 == NULL)
 		s1 = "";
+
 	if (s2 == NULL)
 		s2 = "";
 
-	while (s1[idx])
-		idx++;
-	size = ++idx + n;
+	if (n < _strlen(s2))
+		m = malloc(_strlen(s1) + n * sizeof(char) + 1);
 
-	str_copy = malloc(size * sizeof(char));
-	if (str_copy == NULL)
+	else
+		m = malloc(_strlen(s1) + _strlen(s2) + 1);
+
+	if (m == 0)
 		return (NULL);
 
-	for (idx = 0; s1[idx]; idx++)
-		str_copy[idx] = s1[idx];
-	for (idx2 = 0; idx2 < n && s2[idx2]; idx2++)
-	{
-		str_copy[idx] = s2[idx2];
-		idx++;
+	for (i = 0; s1[i] != '\0'; i++)
+		m[i] = s1[i];
+
+	for (j = 0; s2[j] != '\0' && j < n; i++, j++)
+		m[i] = s2[j];
+
+	m[i] = '\0';
+
+	return (m);
+
 	}
-	str_copy[idx] = '\0';
-	return (str_copy);
-}
