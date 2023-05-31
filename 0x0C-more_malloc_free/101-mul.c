@@ -1,120 +1,147 @@
 #include "main.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 /**
- * _memset - Function that fills memory with a constant byte
- * @s: Pointer to memory
- * @b: Constant byte
- * @n: Integer, number of bytes
- * Return: Pointer to memory area
- */
-
-char *_memset(char *s, char b, unsigned int n)
-{
-	unsigned int i;
-
-	for (i = 0; i < n; i++)
-		s[i] = b;
-	return (s);
-}
-
-/**
- * _calloc - Function that allocates memory for an array, using _memset
+ * _print - moves a string one place to the left and prints the string
+ * @str: string to move
+ * @l: size of string
  *
- * @nmemb: Int for number of elements in the array
- * @size: Int for size of each element in the array
- * Return: Pointer value to the allocated memory, otherwise NULL
+ * Return: void
  */
-
-void *_calloc(unsigned int nmemb, unsigned int size)
+void _print(char *str, int l)
 {
-	char *arr;
+	int i, j;
 
-	if (nmemb == 0 || size == 0)
-		return (NULL);
-	arr = malloc(nmemb * size);
-	if (arr == NULL)
-		return (NULL);
-	_memset(arr, 0, nmemb * size);
+	i = j = 0;
+	while (i < l)
+	{
+		if (str[i] != '0')
+			j = 1;
+		if (j || i == l - 1)
+			_putchar(str[i]);
+		i++;
+	}
 
-	return (arr);
+	_putchar('\n');
+	free(str);
 }
 
 /**
- * mul_numbers - Program that initializes an array
- * @str1: Array of first string
- * @str2: Array of second string
- * Return: Void
+ * mul - multiplies a char with a string and places the answer into dest
+ * @n: char to multiply
+ * @num: string to multiply
+ * @num_index: last non NULL index of num
+ * @dest: destination of multiplication
+ * @dest_index: highest index to start addition
+ *
+ * Return: pointer to dest, or NULL on failure
  */
-
-void mul_numbers(char *str1, char *str2)
+char *mul(char n, char *num, int num_index, char *dest, int dest_index)
 {
-	char *arr;
-	void *temp;
-	int idx = 0, len1, len2, num1, num2, mul, tmp, total;
+	int j, k, mul, mulrem, add, addrem;
 
-	while (str1[idx])
-		idx++;
-	len1 = idx;
-	idx = 0;
-	while (str2[idx])
-		idx++;
-	len2 = idx;
-	tmp = len2;
-	total = len1 + len2;
-	arr = _calloc(sizeof(int), total);
-	temp = arr;
-	for (len1--; len1 >= 0; len1--)
+	mulrem = addrem = 0;
+	for (j = num_index, k = dest_index; j >= 0; j--, k--)
 	{
-		num1 = str1[len1] - '0';
-		mul = 0;
-		len2 = tmp;
-		for (len2--; len2 >= 0; len2--)
+		mul = (n - '0') * (num[j] - '0') + mulrem;
+		mulrem = mul / 10;
+		add = (dest[k] - '0') + (mul % 10) + addrem;
+		addrem = add / 10;
+		dest[k] = add % 10 + '0';
+	}
+	for (addrem += mulrem; k >= 0 && addrem; k--)
+	{
+		add = (dest[k] - '0') + addrem;
+		addrem = add / 10;
+		dest[k] = add % 10 + '0';
+	}
+	if (addrem)
+	{
+		return (NULL);
+	}
+	return (dest);
+}
+/**
+ * check_for_digits - checks the arguments to ensure they are digits
+ * @av: pointer to arguments
+ *
+ * Return: 0 if digits, 1 if not
+ */
+int check_for_digits(char **av)
+{
+	int i, j;
+
+	for (i = 1; i < 3; i++)
+	{
+		for (j = 0; av[i][j]; j++)
 		{
-			num2 = str2[len2] - '0';
-			mul += arr[len2 + len1 + 1] + (num1 * num2);
-			arr[len1 + len2 + 1] = mul % 10;
-			mul /= 10;
+			if (av[i][j] < '0' || av[i][j] > '9')
+				return (1);
 		}
-		if (mul)
-			arr[len1 + len2 + 1] = mul % 10;
 	}
-	while (*arr == 0)
-	{
-		arr++;
-		total--;
-	}
-	for (idx = 0; idx < total; idx++)
-		printf("%i", arr[idx]);
-	printf("\n");
-	free(temp);
+	return (0);
 }
 
 /**
- * main - Program that multiplies two positive numbers
- * @argc: Argument count
- * @argv: Array of pointers to argument
- * Return: 0 for success
+ * init - initializes a string
+ * @str: sting to initialize
+ * @l: length of strinf
+ *
+ * Return: void
  */
+void init(char *str, int l)
+{
+	int i;
 
+	for (i = 0; i < l; i++)
+		str[i] = '0';
+	str[i] = '\0';
+}
+
+/**
+ * main - multiply two numbers
+ * @argc: number of arguments
+ * @argv: argument vector
+ *
+ * Return: zero, or exit status of 98 if failure
+ */
 int main(int argc, char *argv[])
 {
-	char *num1 = argv[1];
-	char *num2 = argv[2];
+	int l1, l2, ln, ti, i;
+	char *a;
+	char *t;
+	char e[] = "Error\n";
 
-	if (argc != 3 || (*num1 < '0' || *num1 > '9') || (*num2 < '0' || *num2 > '9'))
+	if (argc != 3 || check_for_digits(argv))
 	{
-		printf("Error\n");
-		return (1);
+		for (ti = 0; e[ti]; ti++)
+			_putchar(e[ti]);
+		exit(98);
 	}
-
-	if (*num1 == '0' || *num2 == '0')
+	for (l1 = 0; argv[1][l1]; l1++)
+		;
+	for (l2 = 0; argv[2][l2]; l2++)
+		;
+	ln = l1 + l2 + 1;
+	a = malloc(ln * sizeof(char));
+	if (a == NULL)
 	{
-		_putchar('0');
-		_putchar('\n');
+		for (ti = 0; e[ti]; ti++)
+			_putchar(e[ti]);
+		exit(98);
 	}
-	else
-		mul_numbers(num1, num2);
+	init(a, ln - 1);
+	for (ti = l2 - 1, i = 0; ti >= 0; ti--, i++)
+	{
+		t = mul(argv[2][ti], argv[1], l1 - 1, a, (ln - 2) - i);
+		if (t == NULL)
+		{
+			for (ti = 0; e[ti]; ti++)
+				_putchar(e[ti]);
+			free(a);
+			exit(98);
+		}
+	}
+	_print(a, ln - 1);
 	return (0);
 }
