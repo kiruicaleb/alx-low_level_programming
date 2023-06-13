@@ -1,68 +1,86 @@
 #include "main.h"
 
-/**
- * error_type - Function to state error type
- * @file1: File from
- * @file2: File to
- * @av: Argument vector
- */
+int _close(int fd);
+int _cp(char *file_from, char *file_to);
 
-void error_type(int file1, int file2, char *av[])
-{
-	if (file1 == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", av[1]);								exit(98);
-	}
-	if (file2 == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't write to file %s\n", av[2]);
-		exit(99);
-	}
-}
 /**
- * main - Program that copies the content of a file to another file
+ * main - copies the content of a file to another file
+ * @argc: number of commandline arguments
+ * @argv: array of commandline arguments
  *
- * @argc: Count of the argument
- * @argv: Vector of the argument
- * Return: 0 for success
+ * Return: 0 if successful
  */
-
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
-	int file_from, file_to;
-	ssize_t val, num;
-	char buf[1024];
-
 	if (argc != 3)
 	{
-		dprintf(STDERR_FILENO, "%s\n", "Usage: cp file_from file_to");
+		dprintf(2, "Usage: cp file_from file_to\n");
 		exit(97);
 	}
-	file_from = open(argv[1], O_RDONLY);
-	file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC | O_APPEND, 0664);
-	error_type(file_from, file_to, argv);
 
-	val = 1024;
-	while (val == 1024)
-	{
-		val = read(file_from, buf, 1024);
-		if (val == -1)
-				error_type(-1, 0, argv);
-		num = write(file_to, buf, val);
-		if (num == -1)
-			error_type(0, -1, argv);
-	}
+	/* copy from file_from to file_to */
+	_cp(argv[1], argv[2]);
 
-	if (close(file_from) == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_from);
-		exit(100);
-	}
-
-	if (close(file_to) == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_to);
-		exit(100);
-	}
 	return (0);
+}
+
+/**
+ * _cp - copies the content of a file to another file
+ * @file_from: file to copy from
+ * @file_to: file to copy to
+ *
+ * Return: 1 if successful
+ */
+int _cp(char *file_from, char *file_to)
+{
+	int fd_r, fd_w, count;
+	char buf[1024];
+
+	fd_r = open(file_from, O_RDONLY);
+
+	fd_w = open(file_to, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+
+	/* read bytes from fd_r to fd_w*/
+	while ((count = read(fd_r, buf, 1024)))
+	{
+		if (fd_r == -1 || count == -1)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
+			_close(fd_w);
+			exit(98);
+		}
+
+		if (fd_w == -1 || write(fd_w, buf, count) != count)
+		{
+			_close(fd_r);
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file_to);
+			exit(99);
+		}
+	}
+
+	/* close the files */
+	_close(fd_r);
+	_close(fd_w);
+
+	return (1);
+}
+
+/**
+ * _close - close a file given by an file descriptor
+ * @fd: file descriptor
+ *
+ * Return: 1 if successful
+ */
+int _close(int fd)
+{
+	if (fd < 0)
+		return (1);
+
+	if (close(fd) == -1)
+	{
+		dprintf(2, "Error: Can't close fd %d\n", fd);
+		exit(100);
+	}
+
+	return (1);
 }

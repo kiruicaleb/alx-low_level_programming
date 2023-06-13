@@ -1,6 +1,10 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 11a489b21e6de2deb252884c85d31f7e35afea19
 int _putchar(char c);
 int _islower(int c);
 int _isalpha(int c);
